@@ -28,8 +28,10 @@ class App extends React.Component {
       return (
         <div className='App'>
           {this.state.date.getHours()>=19
-            ?<p>Good evening Kien </p>
-            :<p>Hello Kien </p>}
+            ?<p>Good evening, Kien </p>
+            :this.state.date.getHours()<19 && this.state.date.getHours()>=13
+            ?<p>Good afternoon, Kien </p>
+            :<p>Good morning, Kien </p>}
           <h1>{this.state.date.toLocaleTimeString('vi-VI', {hour: '2-digit', minute:'2-digit'})}</h1>
   
         </div>
