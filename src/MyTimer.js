@@ -18,18 +18,18 @@ class MyTimer extends React.Component {
     
     setMinute = (event)=>{
         this.setState({
-            minute: event.target.value,
+            minute: parseInt(event.target.value),
             set: {
-                min: event.target.value
+                min: parseInt(event.target.value)
             }
         })
         console.log(this.state.minute)
     }
     setSecond = (event)=>{
         this.setState({
-            second: event.target.value,
+            second: parseInt(event.target.value),
             set: {
-                sec: event.target.value
+                sec: parseInt(event.target.value)
             }
         })
 
@@ -48,7 +48,7 @@ class MyTimer extends React.Component {
   
     tickTimer(){
         const {second, minute} = this.state
-        console.log('minute',this.state.minute,'second',this.state.second)
+        console.log('minute',typeof(minute),this.state.minute,'second',this.state.second)
         if(second>0){
             this.setState({
                 second: second - 1
@@ -57,14 +57,13 @@ class MyTimer extends React.Component {
         if(second===0){
             if(minute===0){
                 clearInterval(this.timerID);
-                console.log('time-off')
                 this.setState({
                     run: 'done'
                 })
             } else {
                 this.setState({
-                    minute: minute - 1,
-                    second: 59
+                    minute : minute -1,
+                    second : 59
                 })
             }
 
@@ -86,34 +85,44 @@ class MyTimer extends React.Component {
     
     render(){
         const {minute, second, run}= this.state;
-        if(run=== 'off' || run==='done'){
-            return (
-                <div className='tc'>
-                    <input onChange={this.setMinute} type='number' min='0' max='180'/>
-                    <input onChange={this.setSecond} type='number' min='0' max='59' />
-                    <h2>{minute} : {second}</h2>
-                    <button onClick= {this.startTimer}>Start</button>
-                    <button style={{color:'#dbcfc1'}}>Reset</button>
-                    {run === 'done'
-                        ?<div><audio src={sound} autoPlay/></div>
-                        :<div></div>
-                    }
-                </div>
-              )
-        } if(run==='on'){
-            return (
-                <div className='tc'>
-                    <h2>{minute} : {second}</h2>
-                    <button style={{color:'#dbcfc1'}}>Start</button>
-                    <button onClick= {this.resetTimer}>Reset</button>
-                    {run === 'done'
-                        ?<div><audio src={sound} autoPlay/></div>
-                        :<div></div>
-                    }
-                </div>
-              )
-        }
         
+        const inputMinute = run === 'off'
+            ?<input onChange={this.setMinute} type='number' min='0' max='180'/>
+            :null
+        
+        const inputSecond = run === 'off'
+            ?<input onChange={this.setSecond} type='number' min='0' max='59' />
+            :null
+        
+        const countDown = <h2>{minute} : {second}</h2>
+        
+        const buttonStart = run === 'off'
+            ?<button onClick= {this.startTimer}>Start</button>
+            :run === 'on'
+                ?<button style={{color:'#dbcfc1'}}>Start</button>
+                :<button style={{color:'#dbcfc1'}}>Start</button>
+        
+        const buttonReset = run === 'off'
+            ?<button style={{color:'#dbcfc1'}}>Reset</button>
+            :run === 'on'
+                ?<button onClick= {this.resetTimer}>Reset</button>
+                :<button onClick= {this.resetTimer}>Reset</button>
+        
+        const soundEffect = run === 'done'
+            ?<div><audio src={sound} autoPlay/></div>
+            :null
+
+
+        return (
+            <div className='tc'>
+                {inputMinute}
+                {inputSecond}
+                {countDown}
+                {buttonStart}
+                {buttonReset}
+                {soundEffect}                
+            </div>
+            )
     }
   
   }
