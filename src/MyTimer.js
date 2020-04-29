@@ -6,49 +6,75 @@ class MyTimer extends React.Component {
       super();
       this.state={
         second : 0,
-        minute : 2,
-        run: 'off'
+        minute : 0,
+        run: 'off',
+        set: {
+            sec: 0,
+            min: 0
+        }
       }
     }
-  
+
+    
+    setMinute = (event)=>{
+        this.setState({
+            minute: event.target.value,
+            set: {
+                min: event.target.value
+            }
+        })
+        console.log(this.state.minute)
+    }
+    setSecond = (event)=>{
+        this.setState({
+            second: event.target.value,
+            set: {
+                sec: event.target.value
+            }
+        })
+
+        
+    }
+
     startTimer = ()=>{
-      this.timerID = setInterval( ()=>
-        this.tickTimer(), 1000
-      );
-      this.setState({
-          run: 'on'
-      })
+            this.timerID = setInterval( ()=>
+            this.tickTimer(), 1000
+            );
+            this.setState({
+              run: 'on'
+            })
     }
   
   
     tickTimer(){
-  
-      if(this.state.second===0){
-        if(this.state.minute===0){
-          clearInterval(this.timerID);
-        } else{
-          this.setState({
-            second: 59,
-            minute: this.state.minute -1
-          })
+        const {second, minute} = this.state
+        console.log('minute',this.state.minute,'second',this.state.second)
+        if(second>0){
+            this.setState({
+                second: second - 1
+            })
         }
-      }else{
-        this.setState({
-          second: this.state.second - 1
-        })
-      }
+        if(second===0){
+            if(minute===0){
+                clearInterval(this.timerID);
+                console.log('time-off')
+                this.setState({
+                    run: 'done'
+                })
+            } else {
+                this.setState({
+                    minute: minute - 1,
+                    second: 59
+                })
+            }
+
+        }  
     }
     
-    stopTimer=()=>{
-        clearInterval(this.timerID);
-        this.setState({
-            run:'off'
-        })
-    }
-    
+   
     resetTimer = ()=>{
         this.setState({
-            minute: 2,
+            minute: 0,
             second: 0
         });
         clearInterval(this.timerID)
@@ -57,34 +83,37 @@ class MyTimer extends React.Component {
         })
     }
 
-
+    
     render(){
         const {minute, second, run}= this.state;
-        return (
-          <div className='tc'>
-            <h2>{minute} : {this.state.second}</h2>
-          
-            {run === 'off'
-                ?<button onClick= {this.startTimer}>Start</button>
-                :<button style={{color:'#dbcfc1'}}>Start</button>
-            }
-
-            {run === 'on'
-                ?<button onClick= {this.stopTimer}>Stop</button>
-                :<button style={{color:'#dbcfc1'}}>Stop</button>
-            }
-            
-            {run === 'on'
-                ?<button onClick= {this.resetTimer}>Reset</button>
-                :<button style={{color:'#dbcfc1'}}>Reset</button>
-            }
-
-            {minute === 0 && second === 0 
-                ?<div><audio src={sound} autoPlay/></div>
-                :<div></div>
-            }
-          </div>
-        )
+        if(run=== 'off' || run==='done'){
+            return (
+                <div className='tc'>
+                    <input onChange={this.setMinute} type='number' min='0' max='180'/>
+                    <input onChange={this.setSecond} type='number' min='0' max='59' />
+                    <h2>{minute} : {second}</h2>
+                    <button onClick= {this.startTimer}>Start</button>
+                    <button style={{color:'#dbcfc1'}}>Reset</button>
+                    {run === 'done'
+                        ?<div><audio src={sound} autoPlay/></div>
+                        :<div></div>
+                    }
+                </div>
+              )
+        } if(run==='on'){
+            return (
+                <div className='tc'>
+                    <h2>{minute} : {second}</h2>
+                    <button style={{color:'#dbcfc1'}}>Start</button>
+                    <button onClick= {this.resetTimer}>Reset</button>
+                    {run === 'done'
+                        ?<div><audio src={sound} autoPlay/></div>
+                        :<div></div>
+                    }
+                </div>
+              )
+        }
+        
     }
   
   }
