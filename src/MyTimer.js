@@ -1,5 +1,7 @@
 import React from 'react';
-import sound from './Little-Girl-Laughing-A1.mp3'
+import sound from './Little-Girl-Laughing-A1.mp3';
+import Button from 'react-bootstrap/Button';
+
 
 class MyTimer extends React.Component {
     constructor(){
@@ -14,7 +16,6 @@ class MyTimer extends React.Component {
         }
       }
     }
-
     
     setMinute = (event)=>{
         this.setState({
@@ -32,8 +33,6 @@ class MyTimer extends React.Component {
                 sec: parseInt(event.target.value)
             }
         })
-
-        
     }
 
     startTimer = ()=>{
@@ -44,7 +43,6 @@ class MyTimer extends React.Component {
               run: 'on'
             })
     }
-  
   
     tickTimer(){
         const {second, minute} = this.state
@@ -66,10 +64,8 @@ class MyTimer extends React.Component {
                     second : 59
                 })
             }
-
         }  
     }
-    
    
     resetTimer = ()=>{
         this.setState({
@@ -81,13 +77,12 @@ class MyTimer extends React.Component {
             run:'off'
         })
     }
-
     
     render(){
         const {minute, second, run}= this.state;
         
         const inputMinute = run === 'off'
-            ?<input onChange={this.setMinute} type='number' min='0' max='180'/>
+            ?<input onChange={this.setMinute} type='number' min='0' max='180' className='mr-2'/>
             :null
         
         const inputSecond = run === 'off'
@@ -97,34 +92,33 @@ class MyTimer extends React.Component {
         const countDown = <h2>{minute} : {second}</h2>
         
         const buttonStart = run === 'off'
-            ?<button onClick= {this.startTimer}>Start</button>
+            ?<Button onClick= {this.startTimer} className="btn btn-dark mr-3">Start</Button>
             :run === 'on'
-                ?<button style={{color:'#dbcfc1'}}>Start</button>
-                :<button style={{color:'#dbcfc1'}}>Start</button>
+                ?<Button className="btn btn-light mr-3">Start</Button>
+                :<Button className="btn btn-light mr-3">Start</Button>
         
         const buttonReset = run === 'off'
-            ?<button style={{color:'#dbcfc1'}}>Reset</button>
+            ?<Button className="btn btn-light">Reset</Button>
             :run === 'on'
-                ?<button onClick= {this.resetTimer}>Reset</button>
-                :<button onClick= {this.resetTimer}>Reset</button>
+                ?<Button onClick= {this.resetTimer} className="btn btn-dark">Reset</Button>
+                :<Button onClick= {this.resetTimer} className="btn btn-dark">Reset</Button>
         
         const soundEffect = run === 'done'
             ?<div><audio src={sound} autoPlay/></div>
             :null
 
-
         return (
             <div className='tc'>
+                <h2>Timer</h2>
                 {inputMinute}
                 {inputSecond}
                 {countDown}
                 {buttonStart}
                 {buttonReset}
-                {soundEffect}                
+                {soundEffect}
             </div>
             )
     }
-  
   }
   
   export default MyTimer;
