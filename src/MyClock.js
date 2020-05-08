@@ -31,10 +31,10 @@ class MyClock extends React.Component {
         return (
           <div className='App'>
             {this.state.date.getHours()>=19
-              ?<p>Good evening, Kien </p>
+              ?<p className='subheading'>Good evening, Kien </p>
               :this.state.date.getHours()<19 && this.state.date.getHours()>=13
-              ?<p>Good afternoon, Kien </p>
-              :<p>Good morning, Kien </p>}
+              ?<p className='subheading'>Good afternoon, Kien </p>
+              :<p className='subheading'>Good morning, Kien </p>}
             <h1>{this.state.date.toLocaleTimeString()}</h1>
           </div>
         )

@@ -81,11 +81,11 @@ class MyTimer extends React.Component {
     render(){
         const {minute, second, run}= this.state;
         
-        const inputMinute = run === 'off'
+        const inputMinute = run === 'off' || run==='done'            
             ?<input onChange={this.setMinute} type='number' min='0' max='180' className='mr-2'/>
             :null
         
-        const inputSecond = run === 'off'
+        const inputSecond = run === 'off' || run==='done'
             ?<input onChange={this.setSecond} type='number' min='0' max='59' />
             :null
         
